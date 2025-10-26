@@ -1,0 +1,36 @@
+name: hw4-5-tests.yml
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        cd ./hw4
+        cp .env.example .env
+        python -m pip install --upgrade pip
+        pip install -e .[test]
+
+    - name: Run tests with coverage
+      env:
+        PYTHONPATH: ${{ github.workspace }}/hw4
+      run: |
+        pytest tests/ --cov=shop_api --cov-report=xml --cov-report=term-missing
