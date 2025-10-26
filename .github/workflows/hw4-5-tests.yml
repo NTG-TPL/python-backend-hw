@@ -32,4 +32,4 @@ jobs:
     - name: Run tests with coverage
       run: |
         cd ./hw4
-        pytest tests/ --cov=shop_api --cov-report=xml --cov-report=term-missing
+        pytest tests/ --cov=shop_api --cov-report=xml --cov-report=term-missing -vv
